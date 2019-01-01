@@ -1,47 +1,27 @@
 import numpy as N
 from read_data import Dataset
-from sklearn.cluster import KMeans
+from sklearn.feature_extraction import image
 from scipy.signal import medfilt2d
 import time
+import matplotlib.pyplot as plt
 
-def rank_top10_kmeans(myData):
-    print(N.shape(myData.darray), myData.nrows, myData.ncols)
-    myData.darray=N.reshape(myData.darray,(myData.nrows,myData.ncols))
-    print("Done reshaping array.")
-    sortedarray=N.sort(myData.darray, axis=None)
-    print("Done sorting array.")
-    sa2=sortedarray[::-1]
-    print("Done reversing sorted array.")
-    print("Maximum value: "+str(sa2[0]))
-    print("Mean value: "+str(N.mean(myData.darray)))
-    print("Standard Deviation: "+str(N.std(myData.darray)))
+def trim_ascii(myData,top,bot,left,right):
+    if N.max([top,bot])>myData.nrows or N.max([left,right])>myData.ncols:
+        print("ERROR: Attempting to trim more than the dimension of the array!")
+        raise ValueError
 
-    #Example of applying a median filter to a 2-D grid using SciPy
-    stime = time.time()
-    filtered_data = medfilt2d(myData.darray,10)
-    print("Total time for med filter: "+str(time.time()-stime))
+    myData.darray = myData.darray[top:(myData.nrows-bot),left:(myData.ncols-right)] 
+    #myData.darray = myData.darray[500:1500,1000:3000] 
 
+    #now reset the metadata
+    myData.lllon = myData.lllon+(myData.dx*left)
+    myData.lllat = myData.lllat+(myData.dx*bot)
+    myData.ullat = myData.ullat-(myData.dx*top)
+    myData.ullon = myData.lllon
+    myData.ncols = myData.ncols - (left+right)
+    myData.nrows = myData.nrows - (top+bot)
 
-    #Find the local maxes in the filtered grid
-    stime = time.time()
-    sortedarray=N.sort(filtered_data, axis=None)
-    sa2=sortedarray[::-1] #Reverse an array order
-    print("Total time for sorting: "+str(time.time()-stime))
-
-    #The highest values after the median filter are the densest areas
-
-    #Example of masking a 2-D array using masked_where
-    stime = time.time()
-    maskeddata = N.ma.masked_where(myData.darray<(N.mean(myData.darray)+3.0*(N.std(myData.darray))),myData.darray)
-    print("Total time for masking: "+str(time.time()-stime))
-
-    #Example of a k-means clustering in Scikit-Learn
-    kmeans = KMeans(n_clusters=100)
-    kmeans.fit(maskeddata)
-    print(kmeans.cluster_centers_)
-    print(kmeans.labels_)
-
-    return kmeans,maskeddata
+    return
 
 #sorting a numpy array example
 def rank_top10(myData):

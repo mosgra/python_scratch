@@ -37,7 +37,7 @@ def plot_raster(myData,darray):
     #    plt.text(xc+100000,yc+1000,rank,color='k')
 
     #Ancillary Plot Details ----------------------------------------------------------
-    plt.title("Ten Densest Places in North America")
+    plt.title("Population of North America - 2010")
 
     #Save and Show the Plot -----------------------------------------------------------
     plt.savefig(plotfile,dpi=dotsperinch)

@@ -1,18 +1,5 @@
 #!/usr/bin/env python
 
-# --------------------------------------------------------------------------
-# AASG Homework #1: Finding the ten densest places in North America
-# Author: Heather Moser
-# Last modified: January 26, 2011
-#
-# Needs Numeric Python (Numpy) to run basic steps
-#
-# Note: Not sure if submitting "critical" code means that it still needs
-#       to work (or even if the extra credit parts should be included).
-#       I deleted a lot, but the core of the basic data processing is still
-#       there.
-# --------------------------------------------------------------------------
-
 import os, sys, re, stat, struct
 import numpy as N
 import array

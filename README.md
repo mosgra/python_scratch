@@ -5,7 +5,7 @@ Here is the process for merging updates from my local repository (Windows 10) in
 
 1) Open Github Desktop
 2) Copy updated files into the local python_scratch folder (or modify them in place)
-  a) NOTE: If you modify the files directly within the repo directory, the Github Desktop app automagically shows changes.
+(NOTE: If you modify the files directly within the repo directory, the Github Desktop app automagically shows changes.)
 3) Type in a Commit message in the "Summary" box to describe the changes. If you want to change the branch I think you just select a different branch in the middle tab.
 4) Press "Commit".
 5) The "Origin" tab on the right should update to show that there are changes to send. Press it to upload the changes to Github.

@@ -5,7 +5,7 @@ import numpy as N
 import array
 from read_data import *
 from data_proc import *
-from plotting import plot_raster
+from plotting import two_horiz_subplots,plot_raster
 from mpl_toolkits.basemap import maskoceans
 
 inputformat='ascii' #My full code can open binary files, too
@@ -18,7 +18,7 @@ myData90 = Dataset(indata90)
 print("Total time for reading data: "+str(time.time()-stime))
 
 trim_ascii(myData10,700,200,1300,1300)
-#trim_ascii(myData90,500,500,1000,1000)
+trim_ascii(myData90,700,200,1300,1300)
 
 #native data resolution
 lats = N.linspace(myData10.ullat,myData10.lllat,myData10.nrows)
@@ -31,10 +31,12 @@ darray10_thresh=N.where(logdarray10>=0.0,logdarray10,0.0)
 logdarray90=N.log10(myData90.darray,where=(myData90.darray>0))
 darray90_thresh=N.where(logdarray90>=0.0,logdarray90,0.0)
 
-land_only = maskoceans(myData10.longrid,myData10.latgrid,darray10_thresh)
+land_only10 = maskoceans(myData10.longrid,myData10.latgrid,darray10_thresh)
+land_only90 = maskoceans(myData10.longrid,myData10.latgrid,darray90_thresh)
 
 #I removed the RBF code for now but it can still be found at:
 #E:\python_scripts\aasg\exam\exam.py
 
-plot_raster(myData10,land_only)
+two_horiz_subplots(myData10,land_only10,land_only90)
+#plot_raster(myData10,land_only10)
 

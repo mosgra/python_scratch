@@ -14,6 +14,8 @@ class Dataset:
     lllat=0
     missing=-1
     darray=0
+    latgrid=0
+    longrid=0
 
     def __init__(self,infile):
         fname=infile

@@ -5,7 +5,8 @@ import numpy as N
 import array
 from read_data import Dataset
 from data_proc import trim_ascii,local_maxima
-from plotting import two_horiz_subplots,plot_raster
+#from plotting import two_horiz_subplots,plot_raster
+from plotting_c2py import plot_raster_c2py
 from mpl_toolkits.basemap import maskoceans
 import time
 
@@ -18,8 +19,8 @@ myData10 = Dataset(indata10)
 myData90 = Dataset(indata90)
 print("Total time for reading data: "+str(time.time()-stime))
 
-trim_ascii(myData10,700,200,1300,1300)
-trim_ascii(myData90,700,200,1300,1300)
+trim_ascii(myData10,400,0,1000,1000)
+#trim_ascii(myData90,700,200,1300,1300)
 
 #native data resolution
 lats = N.linspace(myData10.ullat,myData10.lllat,myData10.nrows)
@@ -53,5 +54,6 @@ coordsXY = local_maxima(myData10)
 coord_lats = myData10.ullat - (myData10.dx*coordsXY[:,0])
 coord_lons = myData10.lllon + (myData10.dx*coordsXY[:,1])
 
-plot_raster(myData10,land_only10,coord_lats,coord_lons)
+#plot_raster(myData10,land_only10,coord_lats,coord_lons)
+plot_raster_c2py(myData10,land_only10,coord_lats,coord_lons)
 

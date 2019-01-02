@@ -1,7 +1,10 @@
 import numpy as N
 from read_data import Dataset
 from sklearn.feature_extraction import image
+from skimage.feature import peak_local_max
+from skimage import data, img_as_float
 from scipy.signal import medfilt2d
+from scipy import ndimage as ndi
 import time
 import matplotlib.pyplot as plt
 
@@ -22,6 +25,42 @@ def trim_ascii(myData,top,bot,left,right):
     myData.nrows = myData.nrows - (top+bot)
 
     return
+
+#Adapted from example shown at:
+#http://scikit-image.org/docs/stable/auto_examples/segmentation/plot_peak_local_max.html#sphx-glr-auto-examples-segmentation-plot-peak-local-max-py
+def local_maxima(myData):
+    im = img_as_float(myData.darray)
+
+    # image_max is the dilation of im with a 20*20 structuring element
+    # It is used within peak_local_max function
+    image_max = ndi.maximum_filter(im, size=20, mode='constant')
+
+    # Comparison between image_max and im to find the coordinates of local maxima
+    coordinates = peak_local_max(im, threshold_abs=100000,min_distance=50)
+
+    # display results
+    # fig, axes = plt.subplots(1, 3, figsize=(8, 3), sharex=True, sharey=True)
+    # ax = axes.ravel()
+    # ax[0].imshow(im, cmap=plt.get_cmap('gray'))
+    # ax[0].axis('off')
+    # ax[0].set_title('Original')
+
+    # ax[1].imshow(image_max, cmap=plt.get_cmap('gray'))
+    # ax[1].axis('off')
+    # ax[1].set_title('Maximum filter')
+
+    # ax[2].imshow(im, cmap=plt.get_cmap('gray'))
+    # ax[2].autoscale(False)
+    # ax[2].plot(coordinates[:, 1], coordinates[:, 0], 'r.')
+    # ax[2].axis('off')
+    # ax[2].set_title('Peak local max')
+
+    # fig.tight_layout()
+
+    # plt.show()
+
+    return coordinates
+
 
 #sorting a numpy array example
 def rank_top10(myData):

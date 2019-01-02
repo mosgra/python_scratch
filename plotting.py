@@ -51,7 +51,7 @@ def two_horiz_subplots(myData,darray1,darray2):
 def plot_raster(myData,darray):
 
     #rank=['1','2','3','4','5','6','7','8','9','10']
-    plotfile = 'testplot.png'
+    plotfile = 'testplot_diff.png'
     dotsperinch = 150
 
     f = plt.figure()
@@ -61,8 +61,9 @@ def plot_raster(myData,darray):
 
     #Plotting Gridded Data -----------------------------------------------------------
     #xgrid,ygrid = m(longrid,latgrid)
-    mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=ax)
-    plt.colorbar(mesh,ax=ax)
+    mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('RdBu_r'),ax=ax)
+    #mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=ax)
+    plt.colorbar(mesh,ax=ax,label="log(difference)")
     #plt.clim((0,4))
 
     #Plotting Point Data -------------------------------------------------------------
@@ -74,7 +75,7 @@ def plot_raster(myData,darray):
     #    plt.text(xc+100000,yc+1000,rank,color='k')
 
     #Ancillary Plot Details ----------------------------------------------------------
-    plt.title("Population of North America - 2010")
+    plt.title("Population Change in North America: 1990-2010")
 
     #Save and Show the Plot -----------------------------------------------------------
     plt.savefig(plotfile,dpi=dotsperinch)

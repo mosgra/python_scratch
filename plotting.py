@@ -28,7 +28,7 @@ def two_horiz_subplots(myData,darray1,darray2):
 
         m = get_bmap(axis,myData,proj='merc')
 
-        mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray2,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=axis)
+        mesh = m.pcolormesh(myData.longrid,myData.latgrid,grids[i],latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=axis)
 
         # create an axes on the right side of ax. The width of cax will be 5%
         # of ax and the padding between cax and ax will be fixed at 0.05 inch.
@@ -48,7 +48,7 @@ def two_horiz_subplots(myData,darray1,darray2):
     return
 
 
-def plot_raster(myData,darray):
+def plot_raster(myData,darray,ptlats,ptlons):
 
     #rank=['1','2','3','4','5','6','7','8','9','10']
     plotfile = 'testplot_diff.png'
@@ -59,6 +59,8 @@ def plot_raster(myData,darray):
 
     #Ancillary Plot Details ----------------------------------------------------------
     plt.title("Population Change in North America: 1990-2010")
+    ax.set_xlabel("Latitude (deg)",labelpad=15)
+    ax.set_ylabel("Longitude (deg)",labelpad=30)
 
     #Get Basemap
     m = get_bmap(ax,myData,proj='merc')
@@ -67,6 +69,8 @@ def plot_raster(myData,darray):
     #xgrid,ygrid = m(longrid,latgrid)
     mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('RdBu_r'),ax=ax)
     #mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=ax)
+
+    
 
     # create an axes on the right side of ax. The width of cax will be 5%
     # of ax and the padding between cax and ax will be fixed at 0.05 inch.
@@ -77,7 +81,7 @@ def plot_raster(myData,darray):
 
     #Plotting Point Data -------------------------------------------------------------
     #x,y=m(lonlist,latlist)
-    #m.plot(lonlist,latlist,'bo',latlon=True)
+    m.plot(ptlons,ptlats,'bo',latlon=True)
 
     #Plotting Text -------------------------------------------------------------------
     #for rank, xc, yc in zip(rank, x, y):

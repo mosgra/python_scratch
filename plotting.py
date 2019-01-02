@@ -26,7 +26,7 @@ def two_horiz_subplots(myData,darray1,darray2):
         axis.set_xlabel("Latitude (deg)",labelpad=15)
         axis.set_ylabel("Longitude (deg)",labelpad=30)
 
-        m = get_bmap(axis)
+        m = get_bmap(axis,myData,proj='merc')
 
         mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray2,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=axis)
 
@@ -57,13 +57,22 @@ def plot_raster(myData,darray):
     f = plt.figure()
     ax = plt.gca()
 
-    m = get_bmap(ax)
+    #Ancillary Plot Details ----------------------------------------------------------
+    plt.title("Population Change in North America: 1990-2010")
+
+    #Get Basemap
+    m = get_bmap(ax,myData,proj='merc')
 
     #Plotting Gridded Data -----------------------------------------------------------
     #xgrid,ygrid = m(longrid,latgrid)
     mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('RdBu_r'),ax=ax)
     #mesh = m.pcolormesh(myData.longrid,myData.latgrid,darray,latlon=True,cmap=plt.get_cmap('YlGnBu'),ax=ax)
-    plt.colorbar(mesh,ax=ax,label="log(difference)")
+
+    # create an axes on the right side of ax. The width of cax will be 5%
+    # of ax and the padding between cax and ax will be fixed at 0.05 inch.
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    plt.colorbar(mesh,cax=cax,label="log(difference)")
     #plt.clim((0,4))
 
     #Plotting Point Data -------------------------------------------------------------
@@ -74,9 +83,6 @@ def plot_raster(myData,darray):
     #for rank, xc, yc in zip(rank, x, y):
     #    plt.text(xc+100000,yc+1000,rank,color='k')
 
-    #Ancillary Plot Details ----------------------------------------------------------
-    plt.title("Population Change in North America: 1990-2010")
-
     #Save and Show the Plot -----------------------------------------------------------
     plt.savefig(plotfile,dpi=dotsperinch)
     plt.show()
@@ -84,9 +90,14 @@ def plot_raster(myData,darray):
 
     return
 
-def get_bmap(self):
-    #m = Basemap(llcrnrlon=-180.,llcrnrlat=7.,urcrnrlon=-11.,urcrnrlat=85.,projection='merc',lat_ts=30)
-    m = Basemap(ax=self,width=6000000,height=4500000,rsphere=(6378137.00,6356752.3142),resolution='l',area_thresh=1000.,projection='lcc',lat_1=30.,lat_2=40.,lat_0=35.,lon_0=-90)
+def get_bmap(self,myData,proj='lcc'):
+    if proj=='merc':
+        m = Basemap(ax=self,llcrnrlon=myData.lllon,llcrnrlat=myData.lllat,urcrnrlon=(myData.lllon+(myData.dx*myData.ncols)),urcrnrlat=myData.ullat,projection='merc',lat_ts=30)
+    elif proj=='cyl':
+        m = Basemap(ax=self,llcrnrlon=myData.lllon,llcrnrlat=myData.lllat,urcrnrlon=(myData.lllon+(myData.dx*myData.ncols)),urcrnrlat=myData.ullat,projection='cyl')
+    elif proj=='lcc':
+        m = Basemap(ax=self,width=6000000,height=4500000,rsphere=(6378137.00,6356752.3142),resolution='l',area_thresh=1000.,projection='lcc',lat_1=30.,lat_2=40.,lat_0=35.,lon_0=-90)
+
     #ax.set_facecolor('#3333CC')
     m.drawcoastlines(color='#999999') # draw coastlines
     m.drawmapboundary() # draw a line around the map region
